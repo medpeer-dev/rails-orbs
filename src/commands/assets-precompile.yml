@@ -1,0 +1,29 @@
+parameters:
+  key:
+    type: string
+    default: "assets-v1"
+  default_branch:
+    type: string
+    default: "master"
+  rails_env:
+    type: string
+    default: "test"
+
+steps:
+  - restore_cache:
+      keys:
+        - << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+        - << parameters.key >>-{{ arch }}-{{ .Branch }}
+        - << parameters.key >>-{{ arch }}-<< parameters.default_branch >>
+        - << parameters.key >>-{{ arch }}
+  - run:
+      command: bin/rails assets:precompile
+      environment:
+        RAILS_ENV: << parameters.rails_env >>
+  - save_cache:
+      key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+      paths:
+        - tmp/cache/assets
+        - tmp/cache/webpacker
+        - public/assets
+        - public/packs
