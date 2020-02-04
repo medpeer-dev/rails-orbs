@@ -1,8 +1,12 @@
+description: "Install gems with Bundler."
+
 parameters:
   key:
+    description: "The cache key prefix."
     type: string
     default: "gems-v1"
   bundle_path:
+    description: "The location to install gems."
     type: string
     default: "vendor/bundle"
 

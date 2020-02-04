@@ -1,5 +1,5 @@
 version: 2.1
 
 description: >
-  Common tasks for the Ruby on Rails project.
+  An Orb for Rails projects.
   Source: https://github.com/medpeer-dev/rails-orbs
