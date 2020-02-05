@@ -2,16 +2,13 @@ parameters:
   key:
     type: string
     default: "node-deps-v1"
-  default_branch:
-    type: string
-    default: "master"
 
 steps:
   - restore_cache:
       keys:
         - << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
         - << parameters.key >>-{{ arch }}-{{ .Branch }}
-        - << parameters.key >>-{{ arch }}-<< parameters.default_branch >>
+        - << parameters.key >>-{{ arch }}-{{ checksum ".git/refs/remotes/origin/HEAD" }}
         - << parameters.key >>-{{ arch }}
   - run: yarn install --frozen-lockfile
   - save_cache:
