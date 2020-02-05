@@ -1,0 +1,19 @@
+description: "Install gems with Bundler."
+
+parameters:
+  executor:
+    description: "Executor to use for this job"
+    type: executor
+  before-steps:
+    description: "Steps to run before bundle-install"
+    type: steps
+    default: []
+
+executor: << parameters.executor >>
+
+steps:
+  - checkout
+  - << parameters.before-steps >>
+
+  # Install gems and save cache
+  - bundle-install

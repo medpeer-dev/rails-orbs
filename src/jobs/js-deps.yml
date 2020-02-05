@@ -1,0 +1,19 @@
+description: "Install npm packages with Yarn."
+
+parameters:
+  executor:
+    description: "Executor to use for this job"
+    type: executor
+  before-steps:
+    description: "Steps to run before yarn-install"
+    type: steps
+    default: []
+
+executor: << parameters.executor >>
+
+steps:
+  - checkout
+  - << parameters.before-steps >>
+
+  # Install npm packages and save cache
+  - yarn-install
