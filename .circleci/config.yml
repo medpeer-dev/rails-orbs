@@ -1,9 +1,14 @@
 jobs:
   integration-tests:
-    executor: orb-tools/ubuntu
+    docker:
+      - image: circleci/ruby:2.7.0-node-browsers
     steps:
-      - checkout
-      # TODO: implement integration-tests
+      - checkout:
+          path: /tmp/rails-orbs
+      - run: cp -rT /tmp/rails-orbs/test/app .
+      - rails/bundle-install
+      - rails/yarn-install
+      - rails/assets-precompile
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
   rails: medpeer/rails@<<pipeline.parameters.dev-orb-version>>
