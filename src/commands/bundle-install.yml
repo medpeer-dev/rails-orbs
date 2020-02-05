@@ -2,9 +2,6 @@ parameters:
   key:
     type: string
     default: "gems-v1"
-  default_branch:
-    type: string
-    default: "master"
   bundle_path:
     type: string
     default: "vendor/bundle"
@@ -14,7 +11,7 @@ steps:
       keys:
         - << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         - << parameters.key >>-{{ arch }}-{{ .Branch }}
-        - << parameters.key >>-{{ arch }}-<< parameters.default_branch >>
+        - << parameters.key >>-{{ arch }}-{{ checksum ".git/refs/remotes/origin/HEAD" }}
         - << parameters.key >>-{{ arch }}
   - run: bundle config set path << parameters.bundle_path >>
   - run: bundle install --jobs=4 --clean
