@@ -15,6 +15,6 @@ steps:
         - << parameters.key >>-{{ arch }}
   - run: yarn install --frozen-lockfile
   - save_cache:
-      key: << parameters.key >>-{{ arch }}-{{ checksum "yarn.lock" }}
+      key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
       paths:
         - node_modules
