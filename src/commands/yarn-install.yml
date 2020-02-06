@@ -1,5 +1,8 @@
+description: "Install npm packages with Yarn."
+
 parameters:
   key:
+    description: "The cache key prefix."
     type: string
     default: "node-deps-v1"
 

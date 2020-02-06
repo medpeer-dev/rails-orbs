@@ -1,8 +1,12 @@
+description: "Precompile assets with the `assets:precompile` task."
+
 parameters:
   key:
+    description: "The cache key prefix."
     type: string
     default: "assets-v1"
   rails_env:
+    description: "RAILS_ENV when precompiling assets."
     type: string
     default: "test"
 
