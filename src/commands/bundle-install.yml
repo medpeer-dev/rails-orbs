@@ -9,6 +9,10 @@ parameters:
     description: "The location to install gems."
     type: string
     default: "vendor/bundle"
+  restore_only:
+    description: "Whether to skip bundle-install and save_cache steps."
+    type: boolean
+    default: false
 
 steps:
   - restore_cache:
@@ -18,8 +22,11 @@ steps:
         - << parameters.key >>-{{ arch }}-{{ checksum ".git/refs/remotes/origin/HEAD" }}
         - << parameters.key >>-{{ arch }}
   - run: bundle config set path << parameters.bundle_path >>
-  - run: bundle install --jobs=4 --clean
-  - save_cache:
-      key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-      paths:
-        - << parameters.bundle_path >>
+  - unless:
+      condition: <<parameters.restore_only>>
+      steps:
+        - run: bundle install --jobs=4 --clean
+        - save_cache:
+            key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            paths:
+              - << parameters.bundle_path >>

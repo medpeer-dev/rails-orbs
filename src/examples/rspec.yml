@@ -42,7 +42,8 @@ usage:
         - checkout
 
         # Restore npm packages from cache
-        - rails/yarn-install
+        - rails/yarn-install:
+            restore_only: true
 
         # Test with Yarn
         - run: yarn test
@@ -53,8 +54,10 @@ usage:
         - checkout
 
         # Restore gems and npm packages from caches
-        - rails/bundle-install
-        - rails/yarn-install
+        - rails/bundle-install:
+            restore_only: true
+        - rails/yarn-install:
+            restore_only: true
 
         # Precompile assets and save cache
         - rails/assets-precompile
@@ -66,9 +69,12 @@ usage:
         - checkout
 
         # Restore files from caches
-        - rails/bundle-install
-        - rails/yarn-install
-        - rails/assets-precompile
+        - rails/bundle-install:
+            restore_only: true
+        - rails/yarn-install:
+            restore_only: true
+        - rails/assets-precompile:
+            restore_only: true
 
         # Wait for DB
         - run: dockerize -wait tcp://localhost:5432 -timeout 1m

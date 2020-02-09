@@ -5,6 +5,10 @@ parameters:
     description: "The cache key prefix."
     type: string
     default: "node-deps-v1"
+  restore_only:
+    description: "Whether to skip yarn-install and save_cache steps."
+    type: boolean
+    default: false
 
 steps:
   - restore_cache:
@@ -13,8 +17,11 @@ steps:
         - << parameters.key >>-{{ arch }}-{{ .Branch }}
         - << parameters.key >>-{{ arch }}-{{ checksum ".git/refs/remotes/origin/HEAD" }}
         - << parameters.key >>-{{ arch }}
-  - run: yarn install --frozen-lockfile
-  - save_cache:
-      key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      paths:
-        - node_modules
+  - unless:
+      condition: <<parameters.restore_only>>
+      steps:
+        - run: yarn install --frozen-lockfile
+        - save_cache:
+            key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            paths:
+              - node_modules

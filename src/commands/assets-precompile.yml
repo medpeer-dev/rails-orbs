@@ -9,6 +9,10 @@ parameters:
     description: "RAILS_ENV when precompiling assets."
     type: string
     default: "test"
+  restore_only:
+    description: "Whether to skip assets:precompile and save_cache steps."
+    type: boolean
+    default: false
 
 steps:
   - restore_cache:
@@ -17,14 +21,17 @@ steps:
         - << parameters.key >>-{{ arch }}-{{ .Branch }}
         - << parameters.key >>-{{ arch }}-{{ checksum ".git/refs/remotes/origin/HEAD" }}
         - << parameters.key >>-{{ arch }}
-  - run:
-      command: bin/rails assets:precompile
-      environment:
-        RAILS_ENV: << parameters.rails_env >>
-  - save_cache:
-      key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ .Revision }}
-      paths:
-        - tmp/cache/assets
-        - tmp/cache/webpacker
-        - public/assets
-        - public/packs
+  - unless:
+      condition: <<parameters.restore_only>>
+      steps:
+        - run:
+            command: bin/rails assets:precompile
+            environment:
+              RAILS_ENV: << parameters.rails_env >>
+        - save_cache:
+            key: << parameters.key >>-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+            paths:
+              - tmp/cache/assets
+              - tmp/cache/webpacker
+              - public/assets
+              - public/packs
