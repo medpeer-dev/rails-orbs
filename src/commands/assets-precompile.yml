@@ -35,3 +35,4 @@ steps:
               - tmp/cache/webpacker
               - public/assets
               - public/packs
+              - public/packs-test
