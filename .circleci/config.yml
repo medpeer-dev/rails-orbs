@@ -1,7 +1,14 @@
-jobs:
-  integration-tests:
+executors:
+  ruby_with_db:
     docker:
       - image: circleci/ruby:2.7.0-node-browsers
+      - image: circleci/postgres:12.1-alpine-ram
+    environment:
+      DATABASE_URL: 'postgres://postgres:postgres@127.0.0.1:5432'
+
+jobs:
+  integration-tests:
+    executor: ruby_with_db
     steps:
       - checkout:
           path: /tmp/rails-orbs
@@ -9,9 +16,13 @@ jobs:
       - rails/bundle-install
       - rails/yarn-install
       - rails/assets-precompile
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: bin/rails db:create db:test:prepare
+      - ruby/run-tests
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
   rails: medpeer/rails@<<pipeline.parameters.dev-orb-version>>
+  ruby: circleci/ruby@0.2.1
 parameters:
   dev-orb-version:
     default: 'dev:alpha'
