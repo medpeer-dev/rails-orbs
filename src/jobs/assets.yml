@@ -13,7 +13,7 @@ executor: << parameters.executor >>
 
 steps:
   - checkout
-  - << parameters.before-steps >>
+  - steps: << parameters.before-steps >>
 
   # Restore gems and npm packages from caches
   - bundle-install:

@@ -22,7 +22,7 @@ parallelism: << parameters.parallelism >>
 
 steps:
   - checkout
-  - << parameters.before-steps >>
+  - steps: << parameters.before-steps >>
 
   # Restore files from caches
   - bundle-install:

@@ -13,7 +13,7 @@ executor: << parameters.executor >>
 
 steps:
   - checkout
-  - << parameters.before-steps >>
+  - steps: << parameters.before-steps >>
 
   # Install gems and save cache
   - bundle-install
