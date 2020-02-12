@@ -1,0 +1,25 @@
+description: "Precompile assets with the `assets:precompile` task."
+
+parameters:
+  executor:
+    description: "Executor to use for this job"
+    type: executor
+  before-steps:
+    description: "Steps to run before assets:precompile"
+    type: steps
+    default: []
+
+executor: << parameters.executor >>
+
+steps:
+  - checkout
+  - steps: << parameters.before-steps >>
+
+  # Restore gems and npm packages from caches
+  - bundle-install:
+      restore_only: true
+  - yarn-install:
+      restore_only: true
+
+  # Precompile assets and save cache
+  - assets-precompile

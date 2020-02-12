@@ -1,0 +1,34 @@
+description: >
+  Install gems and run RuboCop in parallel.
+
+usage:
+  version: 2.1
+
+  orbs:
+    rails: medpeer/rails@x.y.z
+
+  executors:
+    ruby:
+      docker:
+        - image: circleci/ruby:2.7.0-node-browsers
+
+  jobs:
+    rubocop:
+      executor: ruby
+      steps:
+        - checkout
+
+        # Restore gems from cache
+        - rails/bundle-install:
+            restore_only: true
+
+        - run: bundle exec rubocop --parallel
+
+  workflows:
+    rspec:
+      jobs:
+        - rails/rb-deps:
+            executor: ruby
+        - rubocop:
+            requires:
+              - rails/rb-deps

@@ -1,0 +1,45 @@
+description: "Run tests with RSpec"
+
+parameters:
+  executor:
+    description: "Executor to use for this job"
+    type: executor
+  db-port:
+    description: "Port to wait for DB startup"
+    type: string
+    default: ""
+  parallelism:
+    default: 1
+    type: integer
+  before-steps:
+    description: "Steps to run before run tests"
+    type: steps
+    default: []
+
+executor: << parameters.executor >>
+
+parallelism: << parameters.parallelism >>
+
+steps:
+  - checkout
+  - steps: << parameters.before-steps >>
+
+  # Restore files from caches
+  - bundle-install:
+      restore_only: true
+  - yarn-install:
+      restore_only: true
+  - assets-precompile:
+      restore_only: true
+
+  - when:
+      condition: << parameters.db-port >>
+      steps:
+        # Wait for DB
+        - run: dockerize -wait tcp://localhost:<< parameters.db-port >> -timeout 1m
+
+  # Database setup
+  - run: bin/rails db:create db:test:prepare
+
+  # Test with RSpec
+  - ruby/run-tests
