@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0
+
+- [#9](https://github.com/medpeer-dev/rails-orbs/pull/9) Add jobs for Rails projects
+
 ## v1.1.0
 
 - [#8](https://github.com/medpeer-dev/rails-orbs/pull/8) Add `restore_only` to parameters
