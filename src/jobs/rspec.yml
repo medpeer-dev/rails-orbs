@@ -5,7 +5,7 @@ parameters:
     description: "Executor to use for this job"
     type: executor
   db-port:
-    description: "Waiting for DB to be ready"
+    description: "Port to wait for DB startup"
     type: string
     default: ""
   parallelism:
