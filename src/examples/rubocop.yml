@@ -25,7 +25,7 @@ usage:
         - run: bundle exec rubocop --parallel
 
   workflows:
-    rspec:
+    rubocop:
       jobs:
         - rails/rb-deps:
             executor: ruby
