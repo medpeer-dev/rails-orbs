@@ -25,7 +25,7 @@ steps:
       condition: <<parameters.restore_only>>
       steps:
         - run:
-            command: bin/rails assets:precompile
+            command: bin/rails assets:precompile assets:clean
             environment:
               RAILS_ENV: << parameters.rails_env >>
         - save_cache:
