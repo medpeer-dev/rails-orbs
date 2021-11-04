@@ -15,6 +15,10 @@ parameters:
     description: "Steps to run before run tests"
     type: steps
     default: []
+  after-steps:
+    description: "Steps to run after run tests"
+    type: steps
+    default: []
 
 executor: << parameters.executor >>
 
@@ -43,3 +47,4 @@ steps:
 
   # Test with RSpec
   - ruby/run-tests
+  - steps: << parameters.after-steps >>
